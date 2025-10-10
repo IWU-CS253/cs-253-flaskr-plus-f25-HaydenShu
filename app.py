@@ -68,6 +68,10 @@ def close_db(error):
 def show_entries():
     sort_selected = request.args.get('sort_selected', None)
     db = get_db()
+    all_categories = []
+    cur = db.execute('SELECT DISTINCT category FROM entries ORDER BY category')
+    for row in cur.fetchall():
+        all_categories.append(row[0])
 
     if sort_selected:
        # Safely sorting based on predefined allowed fields
@@ -76,7 +80,7 @@ def show_entries():
     else:
         cur = db.execute('select title, text, category from entries order by id desc')
         entries = cur.fetchall()
-    return render_template('show_entries.html', entries=entries)
+    return render_template('show_entries.html', entries=entries, all_categories = all_categories, selected_categories = sort_selected)
 
 
 @app.route('/add', methods=['POST'])
