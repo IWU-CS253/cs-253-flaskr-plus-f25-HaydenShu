@@ -66,17 +66,24 @@ def close_db(error):
 
 @app.route('/')
 def show_entries():
+    sort_selected = request.args.get('sort_selected', None)
     db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
+
+    if sort_selected:
+       # Safely sorting based on predefined allowed fields
+       cur = db.execute('SELECT title, text, category FROM entries WHERE category = ? ORDER BY id desc', [sort_selected])
+       entries = cur.fetchall()
+    else:
+        cur = db.execute('select title, text, category from entries order by id desc')
+        entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
 
 @app.route('/add', methods=['POST'])
 def add_entry():
     db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-               [request.form['title'], request.form['text']])
+    db.execute('insert into entries (title, text, category) values (?, ?, ?)',
+               [request.form['title'], request.form['text'], request.form['category']])
     db.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))

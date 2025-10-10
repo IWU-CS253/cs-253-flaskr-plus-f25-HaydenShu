@@ -6,8 +6,18 @@
       <dd><input type="text" size="30" name="title">
       <dt>Text:
       <dd><textarea name="text" rows="5" cols="40"></textarea>
+      <dt> Category:
+      <dd><input type="text" size="30" name="category">
       <dd><input type="submit" value="Share">
     </dl>
+  </form>
+  <form method="get" action="{{ url_for('show_entries') }}" >
+  {% for entry in entries %}
+    <label>
+    <input type="radio" name = "sort_selected" value="{{ entry.category }}" {%  if request.args.get('sort_seleced')== entry.category %}checked{% endif %}>
+        {{ entry.category }}
+    </label>
+  {% endfor %}
   </form>
   <ul class="entries">
   {% for entry in entries %}
