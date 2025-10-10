@@ -12,13 +12,13 @@
     </dl>
   </form>
   <form method="get" action="{{ url_for('show_entries') }}" >
-  {% for category in all_categories %}
-    <label>
-    <input type="radio" name = "sort_selected" value="{{ category }}" {%  if selected_category == category %}checked{% endif %}>
+    {% for category in all_categories %}
+        <label>
+        <input type="radio" name = "sort_selected" value="{{ category }}" {%  if selected_category == category %}checked{% endif %}>
         {{ category }}
-    </label>
-  {% endfor %}
-    <button type="submit">Filter Plus</button>
+        </label>
+    {% endfor %}
+    <button type="submit">Filter</button>
     <a href="{{ url_for('show_entries') }}"><button type="button">Reset</button></a>
   </form>
   <ul class="entries">
