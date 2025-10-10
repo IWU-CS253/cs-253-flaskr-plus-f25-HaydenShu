@@ -75,10 +75,10 @@ def show_entries():
 
     if sort_selected:
        # Safely sorting based on predefined allowed fields
-       cur = db.execute('SELECT title, text, category FROM entries WHERE category = ? ORDER BY id desc', [sort_selected])
+       cur = db.execute('SELECT id, title, text, category FROM entries WHERE category = ? ORDER BY id desc', [sort_selected])
        entries = cur.fetchall()
     else:
-        cur = db.execute('select title, text, category from entries order by id desc')
+        cur = db.execute('select id, title, text, category from entries order by id desc')
         entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries, all_categories = all_categories, selected_categories = sort_selected)
 
@@ -90,4 +90,14 @@ def add_entry():
                [request.form['title'], request.form['text'], request.form['category']])
     db.commit()
     flash('New entry was successfully posted')
+    return redirect(url_for('show_entries'))
+
+@app.route('/delete', methods=["POST"])
+def delete_entry():
+    delete_id = request.form['id']
+    if delete_id:
+        db = get_db()
+        db.execute("DELETE FROM entries WHERE id=?", [delete_id])
+        db.commit()
+
     return redirect(url_for('show_entries'))
