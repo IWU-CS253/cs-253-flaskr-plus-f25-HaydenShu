@@ -1,16 +1,18 @@
 {% extends "layout.html" %}
 {% block body %}
+<div class=card-body">
   <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
     <dl>
       <dt>Title:
-      <dd><input type="text" size="30" name="title">
+      <dd><input type="text" size="30" name="title" class="form-control border-3 w-50">
       <dt>Text:
-      <dd><textarea name="text" rows="5" cols="40"></textarea>
+      <dd><textarea name="text" rows="5" cols="40" class="form-control border-3 w-50"></textarea>
       <dt> Category:
-      <dd><input type="text" size="30" name="category">
-      <dd><input type="submit" value="Share">
+      <dd><input type="text" size="30" name="category" class="form-control border-3 w-50">
+      <dd><input type="submit" value="Share" class="btn btn-primary">
     </dl>
   </form>
+</div>
   <form method="get" action="{{ url_for('show_entries') }}" >
     {% for category in all_categories %}
         <label>
@@ -18,22 +20,24 @@
         {{ category }}
         </label>
     {% endfor %}
-    <button type="submit">Filter</button>
-    <a href="{{ url_for('show_entries') }}"><button type="button">Reset</button></a>
+    <button type="submit" class="btn btn-secondary">Filter</button>
+    <a href="{{ url_for('show_entries') }}"><button type="button" class="btn btn-secondary">Reset</button></a>
   </form>
-  <ul class="entries">
+  <ul class="list-group">
   {% for entry in entries %}
-      <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-    <form action = "/delete" method="post">
+      <li class="list-group-item"><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+    <div class="d-inline">
+    <form action = "/delete" method="post" class="d-inline">
     <input name="id" type="hidden" value="{{ entry.id }}">
-    <button type="submit">Delete</button>
+    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
     </form>
-    <form action = "/update" method="post">
+    <form action = "/update" method="post" class="d-inline">
     <input name="id" type="hidden" value="{{ entry.id }}">
-    <button type="submit">Update</button>
+    <button type="submit" class="btn btn-warning btn-sm">Update</button>
     </form>
+    </div>
   {% else %}
-    <li><em>Unbelievable.  No entries here so far</em></li>
+    <li class="list-group-item"><em>Unbelievable.  No entries here so far</em></li>
   {% endfor %}
   </ul>
 {% endblock %}
