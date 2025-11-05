@@ -101,3 +101,23 @@ def delete_entry():
         db.commit()
 
     return redirect(url_for('show_entries'))
+
+@app.route('/update', methods=["POST"])
+def update_entry():
+    update_id = request.form['id']
+    db = get_db()
+    cur = db.execute("SELECT id, title, text, category FROM entries WHERE id=?", [update_id])
+    entry = cur.fetchone()
+    cur = db.execute("SELECT id, title, text, category FROM entries WHERE id=?", [update_id])
+    entries = cur.fetchall()
+    return render_template('populated_update.html', entry = entry, entries=entries)
+
+@app.route('/submit_update', methods=["POST"])
+def submit_update():
+    update_id = request.form['id']
+    db = get_db()
+    db.execute('UPDATE entries SET title=?, text=?, category=? WHERE id=?',
+               [request.form['title'], request.form['text'], request.form['category'], update_id])
+    db.commit()
+    flash('New entry was successfully updated')
+    return redirect(url_for('show_entries'))

@@ -1,18 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class=card-body">
-  <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+  <form action="/submit_update" method="post">
+    <input type="hidden" name="id" value="{{ entry.id }}">
     <dl>
       <dt>Title:
-      <dd><input type="text" size="30" name="title" class="form-control border-3 w-50">
+      <dd><input type="text" size="30" name="title" value="{{ entry.title }}" class="form-control border-3 w-50">
       <dt>Text:
-      <dd><textarea name="text" rows="5" cols="40" class="form-control border-3 w-50"></textarea>
+      <dd><textarea name="text" rows="5" cols="40" class="form-control border-3 w-50">{{ entry.text }}</textarea>
       <dt> Category:
-      <dd><input type="text" size="30" name="category" class="form-control border-3 w-50">
-      <dd><input type="submit" value="Share" class="btn btn-primary">
+      <dd><input type="text" size="30" name="category" value = "{{ entry.category }}" class="form-control border-3 w-50">
+      <dd><input type="submit" value="Update" class="btn btn-primary">
     </dl>
   </form>
-</div>
   <form method="get" action="{{ url_for('show_entries') }}" >
     {% for category in all_categories %}
         <label>
