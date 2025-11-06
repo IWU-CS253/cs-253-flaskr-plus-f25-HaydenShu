@@ -148,5 +148,14 @@ class FlaskrTestCase(unittest.TestCase):
 
         assert rv.data.index(b'Second Entry') < rv.data.index(b'First Entry')
 
+    def test_add_entry_with_empty_fields(self):
+        rv = self.app.post('/add', data=dict(
+            title='',
+            text='',
+            category=''
+        ), follow_redirects=True)
+
+        assert b'New entry was successfully posted' in rv.data
+
 if __name__ == '__main__':
     unittest.main()
