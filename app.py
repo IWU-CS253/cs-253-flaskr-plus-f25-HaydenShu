@@ -104,8 +104,6 @@ def delete_entry():
 
 @app.route('/update', methods=["POST"])
 def update_entry():
-    sort_selected = request.args.get('sort_selected', None)
-    all_categories = []
     update_id = request.form['id']
     db = get_db()
     cur = db.execute("SELECT id, title, text, category FROM entries WHERE id=?", [update_id])
@@ -113,6 +111,7 @@ def update_entry():
 
     cur = db.execute("SELECT id, title, text, category FROM entries WHERE id=?", [update_id])
     entries = cur.fetchall()
+    
     return render_template('populated_update.html', entry = entry, entries=entries)
 
 @app.route('/submit_update', methods=["POST"])
